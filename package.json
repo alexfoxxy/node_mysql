@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "mysql2": "^2.2.5",
+    "nodejs-base64": "^1.0.3",
     "sequelize": "^6.3.5",
     "uuid": "^8.3.1",
     "vuetify": "^2.3.16"

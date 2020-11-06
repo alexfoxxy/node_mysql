@@ -7,9 +7,9 @@ Config mysql param.
 
 JSON USER
 {
-   username: "test_user",
-   email: "test_email",
-   password: "test_pass"
+   "username": "test_user",
+   "email": "test_email",
+   "password": "test_pass"
 }
 
 JSON Media

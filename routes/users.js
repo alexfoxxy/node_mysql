@@ -25,14 +25,14 @@ router.post('/', async (req, res) => {
         let emailUsers = req.body.email
         await isIdUnique(emailUsers).then(isUnique => {
             console.log(isUnique)
-            if (isUnique) {                
+            if (isUnique) {
                 const users = Users.create({
                     username: req.body.username,
                     email: emailUsers,
                     password: req.body.password,
                     usertoken: uuidv4(),
                     done: false
-                });                
+                });
                 res.status(201).json({ users });
             } else
                 res.status(400).json({
