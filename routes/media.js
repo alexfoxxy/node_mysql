@@ -3,7 +3,8 @@ const Media = require('../models/media');
 const Users = require('../models/users');
 const path = require('path');
 const fs = require('fs');
-const { base64encode, base64decode } = require('nodejs-base64');
+const media = require('../models/media');
+
 const router = Router()
 /*
 // SELECT
@@ -22,11 +23,28 @@ router.get('/', async (req, res) => {
 router.get('/downloadFile', async (req, res) => {
     try {
         let mediaId = req.body.mediaId;
-        let mediaObj = Media.findOne(mediaId)
+        /*let mediaObj = await Media.findOne(
+            {
+                where: { id: mediaId }
+            }
+        );*/
+        let mediaObj = await Media.findByPk(mediaId)
+        if (mediaObj === null) {
+            console.log('Not found!');
+        }
+        console.log(mediaObj instanceof Media)
+        console.log(mediaObj.id)
         let fullFilePath = mediaObj.filePath;
+
         let fileBase64 = 'someBase64'
         console.log(fullFilePath)
-        res.status(201).json({ data: fileBase64 })
+        console.log(await mediaObj.path)
+        let buff = fs.readFileSync(
+            path.join(mediaObj.path)
+        )
+        let base64data = buff.toString('base64');
+        //res.status(201).json({ data: mediaObj.path })
+        res.status(201).json({ data: base64data })
     } catch (error) {
         console.log(error)
         res.status(500).json({
@@ -39,11 +57,12 @@ router.get('/downloadFile', async (req, res) => {
 router.post('/uploadFile', async (req, res) => {
     try {
         let userToken = req.body.usertoken;
+        let fileName = req.body.fileName
         let fileBase64 = req.body.base64File
-        let buff = new Buffer(fileBase64, 'base64');
+        let buff = Buffer(fileBase64, 'base64');
         console.log(Buffer(buff, 'base64'))
         fs.writeFileSync(
-            path.join('./', 'tmp', 'temp.txt'),
+            path.join('./', 'tmp', fileName),
             buff,
             (err) => {
                 if (err) throw err
@@ -55,10 +74,11 @@ router.post('/uploadFile', async (req, res) => {
         console.log(isUnique)
         if (isUnique) {
             const media = Media.create({
-                path: req.body.path,
+                path: "./temp/" + fileName,
                 dateUpdate: req.body.dateUpdate,
                 done: false
             })
+            console.log(await media)
             res.status(201).json({ media })
         }
         else {
@@ -82,6 +102,8 @@ async function isIdUnique(token) {
         return false;
     }
 }
+
+
 
 // UPDATE
 router.put('/:id', async (req, res) => {

@@ -49,15 +49,20 @@ router.post('/', async (req, res) => {
 })
 
 async function isIdUnique(token) {
-    return await Users.count({ where: { usertoken: token } })
-        .then(count => {
+    try {
+        return await Users.count({ where: { usertoken: token } })
+        count => {
+            throw new Error('errormessage')
             console.log("Count: " + count)
             if (count == 1) {
                 return true;
             } else if (count == 0) {
                 return false;
             }
-        });
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 // UPDATE

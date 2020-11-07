@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
                     usertoken: uuidv4(),
                     done: false
                 });
-                res.status(201).json({ users });
+                res.status(201).json({ message: 'Успех' });
             } else
                 res.status(400).json({
                     message: 'Пользователь существует'
@@ -58,5 +58,15 @@ async function isIdUnique(email) {
             }
         });
 }
+
+async function isIdUnique(token) {
+	let count = await Users.count({ where: { usertoken: token } })
+    if (count == 1) {
+                return true;
+            } else if (count == 0) {
+                return false;
+            }
+}
+
 
 module.exports = router
