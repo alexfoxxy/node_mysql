@@ -9,7 +9,7 @@ const media = sequelize.define('Media', {
         type: Sequelize.INTEGER
     },
     path: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: true
     },
     dateUpdate: {

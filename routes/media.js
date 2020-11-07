@@ -39,11 +39,10 @@ router.get('/downloadFile', async (req, res) => {
 router.post('/uploadFile', async (req, res) => {
     try {
         let userToken = req.body.usertoken;
-        let fileBase64 = req.body.path
-
+        let fileBase64 = req.body.base64File
         let buff = new Buffer(fileBase64, 'base64');
-        console.log(Buffer(buff, 'base64').toString('utf8'))
-        fs.writeFile(
+        console.log(Buffer(buff, 'base64'))
+        fs.writeFileSync(
             path.join('./', 'tmp', 'temp.txt'),
             buff,
             (err) => {
@@ -51,7 +50,6 @@ router.post('/uploadFile', async (req, res) => {
                 console.log("Файл не создан")
             }
         );
-        //fs.writeFile('test.docx', buff);
 
         let isUnique = await isIdUnique(userToken)
         console.log(isUnique)
